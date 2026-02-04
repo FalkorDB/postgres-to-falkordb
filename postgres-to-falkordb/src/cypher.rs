@@ -12,10 +12,7 @@ pub fn json_value_to_cypher_literal(value: &JsonValue) -> String {
         JsonValue::Number(n) => n.to_string(),
         JsonValue::String(s) => format!("\"{}\"", s.replace('\"', "\\\"")),
         JsonValue::Array(items) => {
-            let rendered: Vec<String> = items
-                .iter()
-                .map(json_value_to_cypher_literal)
-                .collect();
+            let rendered: Vec<String> = items.iter().map(json_value_to_cypher_literal).collect();
             format!("[{}]", rendered.join(", "))
         }
         JsonValue::Object(map) => {

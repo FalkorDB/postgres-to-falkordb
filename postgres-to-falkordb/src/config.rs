@@ -267,7 +267,10 @@ mod tests {
         let path = write_temp_file(yaml, "yaml");
         let cfg = Config::from_file(&path)?;
         let pg = cfg.postgres.expect("expected postgres config");
-        assert_eq!(pg.url.as_deref(), Some("postgres://user:pass@localhost:5432/db"));
+        assert_eq!(
+            pg.url.as_deref(),
+            Some("postgres://user:pass@localhost:5432/db")
+        );
         assert_eq!(pg.password.as_deref(), Some("super-secret"));
         Ok(())
     }

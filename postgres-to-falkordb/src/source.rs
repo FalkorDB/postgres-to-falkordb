@@ -1,6 +1,6 @@
-use std::fs;
 use anyhow::{anyhow, Context, Result};
 use serde_json::{Map as JsonMap, Value as JsonValue};
+use std::fs;
 use tokio_postgres::{Client, NoTls, Row};
 
 use crate::config::{CommonMappingFields, Config, Mode, PostgresConfig};
@@ -51,7 +51,12 @@ pub async fn fetch_rows_for_mapping(
     let rows = client
         .query(wrapped_sql.as_str(), &[])
         .await
-        .with_context(|| format!("Failed to execute PostgreSQL query for mapping {}", mapping.name))?;
+        .with_context(|| {
+            format!(
+                "Failed to execute PostgreSQL query for mapping {}",
+                mapping.name
+            )
+        })?;
 
     let logical_rows = rows
         .into_iter()
@@ -87,10 +92,12 @@ async fn fetch_rows_paged(
         let rows = client
             .query(paged_sql.as_str(), &[])
             .await
-            .with_context(|| format!(
-                "Failed to execute paged PostgreSQL query for mapping {}",
-                mapping.name
-            ))?;
+            .with_context(|| {
+                format!(
+                    "Failed to execute paged PostgreSQL query for mapping {}",
+                    mapping.name
+                )
+            })?;
 
         let chunk_len = rows.len();
         if chunk_len == 0 {
@@ -225,8 +232,8 @@ fn row_to_logical_row_from_json(row: Row) -> Result<LogicalRow> {
 }
 
 fn load_rows_from_file(path: &str, mapping_name: &str) -> Result<Vec<LogicalRow>> {
-    let data = fs::read_to_string(path)
-        .with_context(|| format!("Failed to read input file {}", path))?;
+    let data =
+        fs::read_to_string(path).with_context(|| format!("Failed to read input file {}", path))?;
     let value: JsonValue = serde_json::from_str(&data)
         .with_context(|| format!("Failed to parse JSON array from {}", path))?;
     let arr = value.as_array().ok_or_else(|| {
