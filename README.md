@@ -1,5 +1,9 @@
 # PostgreSQL-to-FalkorDB Loader
 
+> [!WARNING]
+> Further development of this tool is happening in the `DM-SQL-to-FalkorDB` repository:
+> https://github.com/FalkorDB/DM-SQL-to-FalkorDB
+
 Rust-based CLI tool to migrate and continuously sync structured data from PostgreSQL into a FalkorDB graph, using a declarative mapping.
 
 The design mirrors the existing Snowflake-to-FalkorDB and Databricks-to-FalkorDB loaders: you describe how PostgreSQL tables map to graph nodes and edges in a JSON/YAML config, and the tool handles batching, UNWIND+MERGE upserts, optional soft deletes, and incremental updates based on a watermark column.
